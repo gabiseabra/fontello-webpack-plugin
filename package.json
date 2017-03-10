@@ -1,0 +1,25 @@
+{
+  "name": "fontello-webpack-plugin",
+  "version": "0.1.0",
+  "description": "Fontello Webpack plugin",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha spec"
+  },
+  "author": "Gabriela Seabra",
+  "license": "ISC",
+  "peerDependencies": {
+    "webpack": "^2.2.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "q": "^1.4.1",
+    "unzip": "^0.1.11",
+    "webpack-sources": "^0.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "should": "^11.2.1",
+    "webpack": "^2.2.1"
+  }
+}
