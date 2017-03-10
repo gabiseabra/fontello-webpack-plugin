@@ -7,14 +7,14 @@
   "license": "ISC",
   "homepage": "https://github.com/gabiseabra/fontello-webpack-plugin",
   "repository": {
-	  "type": "git",
-	  "url": "https://github.com/gabiseabra/fontello-webpack-plugin.git"
+    "type": "git",
+    "url": "https://github.com/gabiseabra/fontello-webpack-plugin.git"
   },
   "keywords": [
-	  "font-awesome",
-	  "fontello",
-	  "webpack",
-	  "plugin"
+    "font-awesome",
+    "fontello",
+    "webpack",
+    "plugin"
   ],
   "scripts": {
     "test": "mocha spec"
@@ -27,6 +27,7 @@
   "dependencies": {
     "lodash": "^4.17.4",
     "q": "^1.4.1",
+    "request": "^2.81.0",
     "unzip": "^0.1.11",
     "webpack-sources": "^0.2.0"
   },
