@@ -3,13 +3,26 @@
   "version": "0.1.0",
   "description": "Fontello Webpack plugin",
   "main": "src/index.js",
+  "author": "Gabriela Seabra",
+  "license": "ISC",
+  "homepage": "https://github.com/gabiseabra/fontello-webpack-plugin",
+  "repository": {
+	  "type": "git",
+	  "url": "https://github.com/gabiseabra/fontello-webpack-plugin.git"
+  },
+  "keywords": [
+	  "font-awesome",
+	  "fontello",
+	  "webpack",
+	  "plugin"
+  ],
   "scripts": {
     "test": "mocha spec"
   },
-  "author": "Gabriela Seabra",
-  "license": "ISC",
-  "peerDependencies": {
-    "webpack": "^2.2.0"
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "should": "^11.2.1",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
     "lodash": "^4.17.4",
@@ -17,9 +30,7 @@
     "unzip": "^0.1.11",
     "webpack-sources": "^0.2.0"
   },
-  "devDependencies": {
-    "mocha": "^3.2.0",
-    "should": "^11.2.1",
-    "webpack": "^2.2.1"
+  "peerDependencies": {
+    "webpack": "^2.2.0"
   }
 }
