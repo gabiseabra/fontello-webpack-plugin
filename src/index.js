@@ -64,6 +64,7 @@ class FontelloPlugin {
 				const cssUrl = this.assetUrl("css")
 				this.chunk.files.push(cssUrl)
 				compilation.assets[cssUrl] = css;
+				compilation.chunks.push(this.chunk)
 				promise.then(cb)
 				// cb()
 			});
