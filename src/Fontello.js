@@ -68,8 +68,14 @@ class Fontello {
 		const { host, fonts } = this.options;
 		return this.session()
 			.then(session => new Promise((resolve, reject) => {
-				const assets = {};
+				const assets = {}
 				request.get(`${host}/${session}/get`)
+					.on("response", response => {
+						if(response.statusCode !== 200) {
+							throw new Error(response.statusMessage)
+						}
+					})
+					.on("error", err => reject(err))
 					.pipe(unzip.Parse())
 					.on("entry", entry => {
 						const ext = path.extname(entry.path).slice(1)
@@ -80,7 +86,6 @@ class Fontello {
 						}
 					})
 					.on("close", () => resolve(assets))
-					.on("error", err => reject(err))
 			}))
 	}
 
