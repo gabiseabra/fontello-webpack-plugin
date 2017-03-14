@@ -1,4 +1,3 @@
-const _ = require("lodash")
 const should = require("should")
 const Css = require("../src/Css")
 const config = require("./config.json")
@@ -27,7 +26,7 @@ describe("Css", () => {
 		context("given NO className nor suffix", () => {
 			it("returns an empty array", () => {
 				(new Css({
-					config: _.merge({}, config, {
+					config: Object.assign({}, config, {
 					  css_prefix_text: ""
 					})
 				}, fontUrl))

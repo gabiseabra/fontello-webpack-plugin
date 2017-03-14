@@ -1,16 +1,13 @@
-const _ = require("lodash")
 const should = require("should")
 const Fontello = require("../src/Fontello")
 const config = require("./config.json")
 
-let session = undefined;
-
-const fontUrl = ext => `Font.${ext}`
+let session
 
 describe("Fontello", () => {
 	describe("#session()", () => {
 		it("returns a new session id", (done) => {
-			(new Fontello({ config }, fontUrl))
+			(new Fontello({ config }))
 			.session()
 			.then(sessId => {
 				sessId.should.not.be.empty
@@ -23,23 +20,23 @@ describe("Fontello", () => {
 
 	describe("#assets()", () => {
 		it("returns an map of filenames to assets", () => (
-			(new Fontello({ config, session }, fontUrl))
+			(new Fontello({ config, session }))
 			.assets()
 			.should.be.an.Object()
 		))
 
 		context("given an array of fonts", () => {
-			let promise = undefined
+			let promise
 
 			before("fetch assets", () => {
-				promise = (new Fontello({ config, session, fonts: [ "eot", "ttf" ] }, fontUrl)).assets();
+				promise = (new Fontello({ config, session, fonts: [ "eot", "ttf" ] })).assets()
 			})
 
 			it("emits font types included", () => (
 				promise
 				.then(assets => {
 					assets
-					.should.have.keys(fontUrl("eot"), fontUrl("ttf"))
+					.should.have.keys("eot", "ttf")
 				})
 			))
 
@@ -47,7 +44,7 @@ describe("Fontello", () => {
 				promise
 				.then(assets => {
 					assets
-					.should.not.have.keys(fontUrl("svg"), fontUrl("woff"))
+					.should.not.have.keys("svg", "woff")
 				})
 			))
 		})
