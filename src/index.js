@@ -22,6 +22,7 @@ class FontelloPlugin {
 		this.options = Object.assign({}, defaults, options)
 		this.chunk = new Chunk(this.options.name)
 		this.chunk.ids = []
+		this.chunk.name = this.options.name
 	}
 
 	assetUrl(type, extension) {
@@ -49,6 +50,11 @@ class FontelloPlugin {
 					}
 				})
 				.then(cb)
+			compilation.plugin("additional-assets", cb => {
+				compilation.chunks.push(this.chunk)
+				compilation.namedChunks[this.options.name] = this.chunk
+				cb()
+			})
 		})
 	}
 }

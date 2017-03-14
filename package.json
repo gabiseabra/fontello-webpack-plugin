@@ -17,9 +17,11 @@
     "plugin"
   ],
   "scripts": {
-    "test": "mocha spec"
+    "test": "mocha spec --colors",
+	"watch": "mocha spec --colors --watch"
   },
   "devDependencies": {
+    "dotenv": "^4.0.0",
     "memory-fs": "^0.4.1",
     "mocha": "^3.2.0",
     "should": "^11.2.1",
