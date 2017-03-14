@@ -1,6 +1,6 @@
 {
   "name": "fontello-webpack-plugin",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Fontello Webpack plugin",
   "main": "src/index.js",
   "author": "Gabriela Seabra",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "test": "mocha spec --colors",
-	"watch": "mocha spec --colors --watch"
+    "watch": "mocha spec --colors --watch"
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
