@@ -19,21 +19,9 @@ const defaults = {
 
 class FontelloPlugin {
 	constructor(options) {
-		if(typeof options === "string") {
-			this.options = Object.assign(defaults, {
-				config: options
-			});
-		} else {
-			this.options = Object.assign(defaults, options);
-		}
-	}
-
-	get chunk() {
-		if(!this._chunk) {
-			this._chunk = new Chunk(this.options.name);
-			this._chunk.ids = [];
-		}
-		return this._chunk;
+		this.options = Object.assign({}, defaults, options)
+		this.chunk = new Chunk(this.options.name)
+		this.chunk.ids = []
 	}
 
 	assetUrl(type, extension) {
@@ -47,28 +35,21 @@ class FontelloPlugin {
 	}
 
 	apply(compiler) {
-		const options = this.options;
-		const fontUrl = this.assetUrl.bind(this, "font")
-		const fontello = new Fontello(options, fontUrl)
-		const css = new Css(options, fontUrl)
-		compiler.plugin("make", (compilation, callback) => {
-			const promise = fontello.assets()
-				.then(assets => {
-					for(const fileName in assets) {
-						this.chunk.files.push(fileName);
-						compilation.assets[fileName] = assets[fileName];
+		const fontello = new Fontello(this.options)
+		compiler.plugin("make", (compilation, cb) => {
+			const addFile = (fileName, source) => {
+				this.chunk.files.push(fileName);
+				compilation.assets[fileName] = source;
+			}
+			fontello.sources()
+				.then(sources => {
+					addFile(this.assetUrl("css"), new Css(this.options, this.assetUrl.bind(this, "font")))
+					for(const ext in sources) {
+						addFile(this.assetUrl("font", ext), sources[ext])
 					}
 				})
-				.then(callback)
-			compilation.plugin("additional-assets", cb => {
-				const cssUrl = this.assetUrl("css")
-				this.chunk.files.push(cssUrl)
-				compilation.assets[cssUrl] = css;
-				compilation.chunks.push(this.chunk)
-				promise.then(cb)
-				// cb()
-			});
-			// callback();
+				.then(cb)
+			compilation.chunks.push(this.chunk)
 		})
 	}
 }

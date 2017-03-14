@@ -6,13 +6,14 @@ const request = require("request")
 const Q = require("q")
 const { RawSource } = require("webpack-sources")
 
-const HOST = "http://fontello.com"
+const defaults = {
+	host: "http://fontello.com"
+}
 
 class Fontello {
-	constructor(options, fontUrl) {
-		this.options = _.merge({}, options, { config: { name: "font" }, host: HOST })
+	constructor(options) {
+		this.options = Object.assign({}, defaults, options)
 		this.sessId = options.session
-		this.fontUrl = fontUrl
 		delete this.options.session
 	}
 
@@ -41,7 +42,7 @@ class Fontello {
 			.then(session => {
 				this.sessId = session
 				return session
-			});
+			})
 	}
 
 	assets() {
@@ -54,19 +55,22 @@ class Fontello {
 					.on("entry", entry => {
 						const ext = path.extname(entry.path).slice(1)
 						if(entry.type === "File" && _.includes(fonts, ext)) {
-							const url = this.fontUrl(ext);
 							const buffer = [];
 							entry.on("data", data => buffer.push(data))
-							entry.on("end", () => { assets[url] = Buffer.concat(buffer) })
+							entry.on("end", () => { assets[ext] = Buffer.concat(buffer) })
 						}
 					})
 					.on("close", () => resolve(assets))
 					.on("error", err => reject(err))
 			}))
+	}
+
+	sources() {
+		return this.assets()
 			.then(assets => {
 				const sources = {};
-				for(const fileName in assets) {
-					sources[fileName] = new RawSource(assets[fileName])
+				for(const ext in assets) {
+					sources[ext] = new RawSource(assets[ext])
 				}
 				return sources;
 			})
