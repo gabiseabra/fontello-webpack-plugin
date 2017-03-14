@@ -10,13 +10,27 @@ const defaults = {
 	host: "http://fontello.com"
 }
 
+/**
+ * Fontello helper
+ * 
+ * @class Fontello
+ */
 class Fontello {
+	/**
+	 * @param {Object} options.config
+	 * @param {String=} options.session - Pre-fetched Fontello session id
+	 * @param {String=} options.host    - Where to request build
+	 */
 	constructor(options) {
 		this.options = Object.assign({}, defaults, options)
 		this.sessId = options.session
-		delete this.options.session
 	}
 
+	/**
+	 * Request session id
+	 * 
+	 * @returns {Promise<String>} - New session id
+	 */
 	session() {
 		const { host, config } = this.options;
 		return this.sessId ?
@@ -45,7 +59,12 @@ class Fontello {
 			})
 	}
 
-	assets() {
+	/**
+	 * Fetch fonts
+	 * 
+	 * @returns {Promise} - Resolves to a map of {Buffer}s
+	 */
+	fonts() {
 		const { host, fonts } = this.options;
 		return this.session()
 			.then(session => new Promise((resolve, reject) => {
@@ -65,14 +84,19 @@ class Fontello {
 			}))
 	}
 
-	sources() {
-		return this.assets()
-			.then(assets => {
-				const sources = {};
-				for(const ext in assets) {
-					sources[ext] = new RawSource(assets[ext])
+	/**
+	 * Convert fonts to webpack Source
+	 * 
+	 * @returns {Promise} - Resolves to a map of {RawSource}s
+	 */
+	assets() {
+		return this.fonts()
+			.then(fonts => {
+				const assets = {};
+				for(const ext in fonts) {
+					assets[ext] = new RawSource(fonts[ext])
 				}
-				return sources;
+				return assets;
 			})
 	}
 }

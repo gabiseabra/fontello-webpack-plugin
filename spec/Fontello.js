@@ -21,7 +21,7 @@ describe("Fontello", () => {
 	describe("#assets()", () => {
 		it("returns an map of filenames to assets", () => (
 			(new Fontello({ config, session }))
-			.assets()
+			.fonts()
 			.should.be.an.Object()
 		))
 
@@ -35,16 +35,14 @@ describe("Fontello", () => {
 			it("emits font types included", () => (
 				promise
 				.then(assets => {
-					assets
-					.should.have.keys("eot", "ttf")
+					assets.should.have.keys("eot", "ttf")
 				})
 			))
 
 			it("does NOT emit font types not included", () => (
 				promise
 				.then(assets => {
-					assets
-					.should.not.have.keys("svg", "woff")
+					assets.should.not.have.keys("svg", "woff")
 				})
 			))
 		})

@@ -37,7 +37,18 @@ const ICON_CSS = ({ className, code }) => `
 .${className}::before { content: "\\${code.toString(16)}"; }
 `
 
+/**
+ * Css source
+ * 
+ * @class Css
+ */
 class Css {
+	/**
+	 * @param {Object} options.config
+	 * @param {Array} options.fonts       - Font types
+	 * @param {String=} options.className - Base class name
+	 * @param {Function} fontUrl 
+	 */
 	constructor({ config, fonts, className }, fontUrl) {
 		this.options = {
 			glyphs: config.glyphs,
@@ -50,6 +61,10 @@ class Css {
 		this.fontUrl = fontUrl;
 	}
 
+	/**
+	 * @param {String} name 
+	 * @returns {String}
+	 */
 	glyphClassName(name) {
 		if(this.options.isSufix) {
 			return name + this.options.prefix;
@@ -59,7 +74,9 @@ class Css {
 	}
 
 	/**
-	 * @returns Array
+	 * Typeface src entries
+	 * 
+	 * @returns {String[]}
 	 * @readonly
 	 */
 	get sources() {
@@ -75,7 +92,9 @@ class Css {
 	}
 
 	/**
-	 * @returns Array
+	 * Css selectors applicable to all icons
+	 * 
+	 * @returns {String[]}
 	 * @readonly
 	 */
 	get genericSelectors() {
@@ -98,7 +117,7 @@ class Css {
 	}
 
 	/**
-	 * @returns String
+	 * @returns {String}
 	 * @readonly
 	 */
 	get cssText() {

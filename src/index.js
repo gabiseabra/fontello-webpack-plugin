@@ -38,10 +38,10 @@ class FontelloPlugin {
 		const fontello = new Fontello(this.options)
 		compiler.plugin("make", (compilation, cb) => {
 			const addFile = (fileName, source) => {
-				this.chunk.files.push(fileName);
-				compilation.assets[fileName] = source;
+				this.chunk.files.push(fileName)
+				compilation.assets[fileName] = source
 			}
-			fontello.sources()
+			fontello.assets()
 				.then(sources => {
 					addFile(this.assetUrl("css"), new Css(this.options, this.assetUrl.bind(this, "font")))
 					for(const ext in sources) {
@@ -49,7 +49,6 @@ class FontelloPlugin {
 					}
 				})
 				.then(cb)
-			compilation.chunks.push(this.chunk)
 		})
 	}
 }
