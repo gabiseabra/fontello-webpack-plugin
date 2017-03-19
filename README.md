@@ -17,7 +17,7 @@ npm install fontello-webpack-plugin
 const FontelloPlugin = require("fontello-webpack-plugin")
 
 module.exports = {
-	"entry": "index.js",
+	entry: "index.js",
 	/* ... */
 	plugins: [
 		new FontelloPlugin({
@@ -42,4 +42,5 @@ new FontelloPlugin(options: Object)
 |name|`String`|`"icons"`|Module name.
 |output.css|`String`|`"[name].css"`|Css output path
 |output.font|`String`|`"font/[name].[ext]"`|Fonts output path
+
 <sup>1</sup> When `config.css_prefix_text` is empty a base class name is required to target all icons in css. If no prefix or class name is provided base styles are not emited.
