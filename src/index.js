@@ -37,6 +37,7 @@ class FontelloPlugin {
 
 	apply(compiler) {
 		const fontello = new Fontello(this.options)
+		const cssFile = this.assetUrl("css")
 		compiler.plugin("make", (compilation, cb) => {
 			const addFile = (fileName, source) => {
 				this.chunk.files.push(fileName)
@@ -44,12 +45,16 @@ class FontelloPlugin {
 			}
 			fontello.assets()
 				.then(sources => {
-					addFile(this.assetUrl("css"), new Css(this.options, this.assetUrl.bind(this, "font")))
+					addFile(cssFile, new Css(this.options, this.assetUrl.bind(this, "font")))
 					for(const ext in sources) {
 						addFile(this.assetUrl("font", ext), sources[ext])
 					}
 				})
 				.then(cb)
+			compilation.plugin("html-webpack-plugin-before-html-generation", (data, cb) => {
+				data.assets.css.push(cssFile)
+				cb()
+			})
 			compilation.plugin("additional-assets", cb => {
 				compilation.chunks.push(this.chunk)
 				compilation.namedChunks[this.options.name] = this.chunk
@@ -60,6 +65,7 @@ class FontelloPlugin {
 }
 
 FontelloPlugin.Css = Css
+
 FontelloPlugin.Fontello = Fontello
 
 module.exports = FontelloPlugin
