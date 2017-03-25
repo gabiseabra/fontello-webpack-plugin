@@ -52,7 +52,7 @@ class FontelloPlugin {
 				.then(cb)
 			compilation.plugin("html-webpack-plugin-before-html-generation", (data, cb) => {
 				data.assets.css.push(cssFile)
-				cb()
+				cb(null, data)
 			})
 			compilation.plugin("additional-assets", cb => {
 				compilation.chunks.push(this.chunk)
