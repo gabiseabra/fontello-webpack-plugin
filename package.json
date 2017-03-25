@@ -28,9 +28,9 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
+    "form-data": "^2.1.2",
     "lodash": "^4.17.4",
-    "q": "^1.4.1",
-    "request": "^2.81.0",
+    "node-fetch": "^1.6.3",
     "unzip": "^0.1.11",
     "webpack-sources": "^0.2.0"
   },

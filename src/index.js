@@ -1,7 +1,6 @@
 const _ = require("lodash")
 const path = require("path")
 const Chunk = require("webpack/lib/Chunk")
-const Q = require("q")
 const FontTypes = require("./FontTypes")
 const Fontello = require("./Fontello")
 const Css = require("./Css")

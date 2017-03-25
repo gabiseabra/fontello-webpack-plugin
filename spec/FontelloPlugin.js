@@ -1,10 +1,10 @@
-require("dotenv").load()
-const Q = require("q")
 const should = require("should")
 const webpack = require("webpack")
 const MemoryFs = require("memory-fs")
 const FontelloPlugin = require("../src")
 const config = require("./config.json")
+
+require("dotenv").load()
 
 const session = process.env.SESS_ID
 
@@ -30,7 +30,7 @@ describe("FontelloPlugin", () => {
 			plugins: [ plugin ]
 		}))
 		compiler.outputFileSystem = fs
-		return Q.Promise((resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			compiler.run((err, data) => {
 				if(err) {
 					reject(err)

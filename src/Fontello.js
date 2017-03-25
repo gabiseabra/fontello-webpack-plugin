@@ -2,8 +2,8 @@ const _ = require("lodash")
 const path = require("path")
 const stream = require("stream")
 const unzip = require("unzip")
-const request = require("request")
-const Q = require("q")
+const fetch = require("node-fetch")
+const FormData = require("form-data")
 const { RawSource } = require("webpack-sources")
 
 const defaults = {
@@ -32,29 +32,24 @@ class Fontello {
 	 * @returns {Promise<String>} - New session id
 	 */
 	session() {
-		const { host, config } = this.options;
-		return this.sessId ?
-			Q.fcall(() => this.sessId) :
-			Q.Promise((resolve, reject) => {
-				request.post({
-					url: host,
-					formData: {
-						config: {
-							value: new Buffer(JSON.stringify(config), "utf8"),
-							options: {
-								filename: "config.json",
-								contentType: "application/json"
-							}
-					 	}
-					}
-				}, (err, response, body) => {
-					if(err) reject(err)
-					if(response.statusCode !== 200) reject(new Error(response.statusMessage))
-					resolve(body)
-				})
+		if(this._session) {
+			return Promise.resolve(this._session)
+		}
+		const { host, config } = this.options
+		const body = new FormData()
+		body.append("config", new Buffer(JSON.stringify(config), "utf8"), {
+			filename: "config.json",
+			contentType: "application/json"
+		})
+		return fetch(host, { method: "POST", body })
+			.then(response => {
+				if(!response.ok) {
+					throw new Error(response.statusText)
+				}
+				return response.text()
 			})
 			.then(session => {
-				this.sessId = session
+				this._session = session
 				return session
 			})
 	}
@@ -67,26 +62,26 @@ class Fontello {
 	fonts() {
 		const { host, fonts } = this.options;
 		return this.session()
-			.then(session => new Promise((resolve, reject) => {
-				const assets = {}
-				request.get(`${host}/${session}/get`)
-					.on("response", response => {
-						if(response.statusCode !== 200) {
-							throw new Error(response.statusMessage)
-						}
-					})
-					.on("error", err => reject(err))
-					.pipe(unzip.Parse())
-					.on("entry", entry => {
-						const ext = path.extname(entry.path).slice(1)
-						if(entry.type === "File" && _.includes(fonts, ext)) {
-							const buffer = [];
-							entry.on("data", data => buffer.push(data))
-							entry.on("end", () => { assets[ext] = Buffer.concat(buffer) })
-						}
-					})
-					.on("close", () => resolve(assets))
-			}))
+			.then(session => fetch(`${host}/${session}/get`))
+			.then(response => {
+				if(!response.ok) {
+					throw new Error(response.statusText)
+				}
+				return new Promise((resolve, reject) => {
+					const assets = {}
+					response.body.pipe(unzip.Parse())
+						.on("entry", entry => {
+							const ext = path.extname(entry.path).slice(1)
+							if(entry.type === "File" && _.includes(fonts, ext)) {
+								const buffer = [];
+								entry.on("data", data => buffer.push(data))
+								entry.on("end", () => { assets[ext] = Buffer.concat(buffer) })
+							}
+						})
+						.on("error", err => reject(err))
+						.on("close", () => resolve(assets))
+				})
+			})
 	}
 
 	/**
