@@ -52,6 +52,9 @@ class Fontello {
 				this._session = session
 				return session
 			})
+			.catch(error => {
+				console.error(error)
+			})
 	}
 
 	/**
@@ -81,6 +84,9 @@ class Fontello {
 						.on("error", err => reject(err))
 						.on("close", () => resolve(assets))
 				})
+			})
+			.catch(error => {
+				console.error(error)
 			})
 	}
 
