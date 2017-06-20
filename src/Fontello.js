@@ -79,6 +79,8 @@ class Fontello {
 								const buffer = [];
 								entry.on("data", data => buffer.push(data))
 								entry.on("end", () => { assets[ext] = Buffer.concat(buffer) })
+							} else {
+								entry.autodrain();
 							}
 						})
 						.on("error", err => reject(err))
