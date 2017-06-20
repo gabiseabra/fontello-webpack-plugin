@@ -49,7 +49,7 @@ class FontelloPlugin {
 						addFile(this.assetUrl("font", ext), sources[ext])
 					}
 				})
-				.then(cb)
+				.then(() => cb())
 			compilation.plugin("html-webpack-plugin-before-html-generation", (data, cb) => {
 				data.assets.css.push(cssFile)
 				cb(null, data)
