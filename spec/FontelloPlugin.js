@@ -44,13 +44,6 @@ describe("FontelloPlugin", () => {
 		})
 	})
 
-	describe("#assetUrl(type, ext?)", () => {
-		it("returns the asset path", () => {
-			plugin.assetUrl("css").should.equal("icons.css")
-			plugin.assetUrl("font", "ttf").should.equal("font/icons.ttf")
-		})
-	})
-
 	it("adds a chunk to compilation", () => {
 		stats.compilation.namedChunks
 		.should.have.key(plugin.options.name)

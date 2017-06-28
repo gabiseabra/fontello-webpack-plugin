@@ -16,6 +16,15 @@ const defaults = {
 	}
 }
 
+// https://github.com/jantimon/html-webpack-plugin/blob/master/index.js#L98
+function getPublicPath(compilation) {
+	let publicPath = compilation.mainTemplate.getPublicPath({ hash: compilation.hash }) || ""
+	if(publicPath && publicPath.substr(-1) !== "/") {
+		publicPath += "/"
+	}
+	return publicPath
+}
+
 class FontelloPlugin {
 	constructor(options) {
 		this.options = Object.assign({}, defaults, options)
@@ -24,39 +33,36 @@ class FontelloPlugin {
 		this.chunk.name = this.options.name
 	}
 
-	assetUrl(type, extension) {
-		const { output, name } = this.options
-		const ext = extension ||  type
-		const replace = {
-			"[name]": name,
-			"[ext]": ext
-		}
-		return output[type].replace(/\[[^\]]+\]/g, (match) => replace[match])
-	}
-
 	apply(compiler) {
+		const { output } = this.options
+		const chunk = this.chunk
 		const fontello = new Fontello(this.options)
-		const cssFile = this.assetUrl("css")
 		compiler.plugin("make", (compilation, cb) => {
+			const cssFile = compilation.getPath(output.css, { chunk })
+			const fontFile = ext => (
+				compilation.getPath(output.font, { chunk })
+				.replace(/\[ext\]/g, ext)
+			)
 			const addFile = (fileName, source) => {
-				this.chunk.files.push(fileName)
+				chunk.files.push(fileName)
 				compilation.assets[fileName] = source
 			}
 			fontello.assets()
 				.then(sources => {
-					addFile(cssFile, new Css(this.options, this.assetUrl.bind(this, "font")))
+					addFile(cssFile, new Css(this.options, fontFile))
 					for(const ext in sources) {
-						addFile(this.assetUrl("font", ext), sources[ext])
+						addFile(fontFile(ext), sources[ext])
 					}
 				})
 				.then(() => cb())
 			compilation.plugin("html-webpack-plugin-before-html-generation", (data, cb) => {
-				data.assets.css.push(cssFile)
+				console.log(getPublicPath(compilation))
+				data.assets.css.push(getPublicPath(compilation) + cssFile)
 				cb(null, data)
 			})
 			compilation.plugin("additional-assets", cb => {
-				compilation.chunks.push(this.chunk)
-				compilation.namedChunks[this.options.name] = this.chunk
+				compilation.chunks.push(chunk)
+				compilation.namedChunks[this.options.name] = chunk
 				cb()
 			})
 		})
