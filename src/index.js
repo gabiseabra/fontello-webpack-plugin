@@ -27,7 +27,7 @@ function getPublicPath(compilation) {
 
 class FontelloPlugin {
 	constructor(options) {
-		this.options = Object.assign({}, defaults, options)
+		this.options = _.defaultsDeep({}, options, defaults)
 		this.chunk = new Chunk(this.options.name)
 		this.chunk.ids = []
 		this.chunk.name = this.options.name
