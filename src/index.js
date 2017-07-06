@@ -43,13 +43,17 @@ class FontelloPlugin {
 				compilation.getPath(output.font, { chunk })
 				.replace(/\[ext\]/g, ext)
 			)
+			const cssRelativePath = ext => path.posix.relative(
+				path.dirname(cssFile),
+				fontFile(ext)
+			)
 			const addFile = (fileName, source) => {
 				chunk.files.push(fileName)
 				compilation.assets[fileName] = source
 			}
 			fontello.assets()
 				.then(sources => {
-					addFile(cssFile, new Css(this.options, fontFile))
+					addFile(cssFile, new Css(this.options, cssRelativePath))
 					for(const ext in sources) {
 						addFile(fontFile(ext), sources[ext])
 					}

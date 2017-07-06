@@ -25,7 +25,14 @@ describe("FontelloPlugin", () => {
 
 	before(() => {
 		fs = new MemoryFs()
-		plugin = new FontelloPlugin({ config, session })
+		plugin = new FontelloPlugin({
+			config,
+			session,
+			output: {
+				css: "css/[name].css",
+				font: "font/[name].[ext]"
+			}
+		})
 		const compiler = webpack(Object.assign({}, webpackConfig, {
 			plugins: [ plugin ]
 		}))
@@ -55,6 +62,8 @@ describe("FontelloPlugin", () => {
 	})
 
 	it("emits a css file", () => {
-		fs.existsSync("/icons.css").should.be.ok()
+		fs.existsSync("/css/icons.css").should.be.ok()
+		fs.readFileSync("/css/icons.css", "utf8")
+		.should.containEql("../font/icons.ttf")
 	})
 })
