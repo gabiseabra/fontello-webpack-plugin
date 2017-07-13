@@ -1,20 +1,9 @@
 const _ = require("lodash")
 const path = require("path")
 const Chunk = require("webpack/lib/Chunk")
-const FontTypes = require("./FontTypes")
+const config = require("./config")
 const Fontello = require("./Fontello")
 const Css = require("./Css")
-
-const defaults = {
-	config: undefined,
-	name: "icons",
-	className: "",
-	fonts: _.keys(FontTypes),
-	output: {
-		css: "[name].css",
-		font: "font/[name].[ext]"
-	}
-}
 
 // https://github.com/jantimon/html-webpack-plugin/blob/master/index.js#L98
 function getPublicPath(compilation) {
@@ -27,7 +16,7 @@ function getPublicPath(compilation) {
 
 class FontelloPlugin {
 	constructor(options) {
-		this.options = _.defaultsDeep({}, options, defaults)
+		this.options = config(options)
 		this.chunk = new Chunk(this.options.name)
 		this.chunk.ids = []
 		this.chunk.name = this.options.name

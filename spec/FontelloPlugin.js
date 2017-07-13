@@ -28,6 +28,7 @@ describe("FontelloPlugin", () => {
 		plugin = new FontelloPlugin({
 			config,
 			session,
+			fonts: [ "woff", "woff2" ],
 			output: {
 				css: "css/[name].css",
 				font: "font/[name].[ext]"
@@ -56,14 +57,16 @@ describe("FontelloPlugin", () => {
 		.should.have.key(plugin.options.name)
 	})
 
-	it("emits font files", () => {
-		fs.existsSync("/font/icons.eot").should.be.ok()
-		fs.existsSync("/font/icons.ttf").should.be.ok()
+	it("emits selected font files", () => {
+		fs.existsSync("/font/icons.woff").should.be.ok()
+		fs.existsSync("/font/icons.woff2").should.be.ok()
+		fs.existsSync("/font/icons.ttf").should.not.be.ok()
+		fs.existsSync("/font/icons.eot").should.not.be.ok()
 	})
 
 	it("emits a css file", () => {
 		fs.existsSync("/css/icons.css").should.be.ok()
 		fs.readFileSync("/css/icons.css", "utf8")
-		.should.containEql("../font/icons.ttf")
+		.should.containEql("../font/icons.woff")
 	})
 })
