@@ -35,6 +35,6 @@
     "webpack-sources": "^0.2.0"
   },
   "peerDependencies": {
-    "webpack": "^2.2.0"
+    "webpack": ">=2.2.0"
   }
 }
