@@ -42,5 +42,6 @@ new FontelloPlugin(options: Object)
 |name|`String`|`"icons"`|Module name.
 |output.css|`String`|`"[name].css"`|Css output path
 |output.font|`String`|`"font/[name].[ext]"`|Fonts output path
+|proxy|`String`|`null`|Proxy URL if you sit behind an http or https proxy, e.g. `http://1.2.3.4:8080`|
 
 <sup>1</sup> When `config.css_prefix_text` is empty a base class name is required to target all icons in css. If no prefix or class name is provided base styles are not emitted.
