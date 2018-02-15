@@ -5,14 +5,16 @@ const unzip = require("unzip")
 const fetch = require("node-fetch")
 const FormData = require("form-data")
 const { RawSource } = require("webpack-sources")
+const HttpsProxyAgent = require('https-proxy-agent')
 
 const defaults = {
-	host: "http://fontello.com"
+	host: "http://fontello.com",
+	proxy: null
 }
 
 /**
  * Fontello helper
- * 
+ *
  * @class Fontello
  */
 class Fontello {
@@ -28,7 +30,7 @@ class Fontello {
 
 	/**
 	 * Request session id
-	 * 
+	 *
 	 * @returns {Promise<String>} - New session id
 	 */
 	session() {
@@ -41,7 +43,8 @@ class Fontello {
 			filename: "config.json",
 			contentType: "application/json"
 		})
-		return fetch(host, { method: "POST", body })
+		const fetchOptions = this.options.proxy ? Object.assign({}, { method: "POST", body }, { agent: new HttpsProxyAgent(this.options.proxy) }) : { method: "POST", body }
+		return fetch(host, fetchOptions)
 			.then(response => {
 				if(!response.ok) {
 					throw new Error(response.statusText)
@@ -59,7 +62,7 @@ class Fontello {
 
 	/**
 	 * Fetch fonts
-	 * 
+	 *
 	 * @returns {Promise} - Resolves to a map of {Buffer}s
 	 */
 	fonts() {
@@ -94,7 +97,7 @@ class Fontello {
 
 	/**
 	 * Convert fonts to webpack Source
-	 * 
+	 *
 	 * @returns {Promise} - Resolves to a map of {RawSource}s
 	 */
 	assets() {
