@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "dotenv": "^4.0.0",
-    "https-proxy-agent": "^2.1.1",
     "memory-fs": "^0.4.1",
     "mocha": "^3.2.0",
     "should": "^11.2.1",
@@ -30,6 +29,7 @@
   },
   "dependencies": {
     "form-data": "^2.1.2",
+    "https-proxy-agent": "^2.1.1",
     "lodash": "^4.17.4",
     "node-fetch": "^1.6.3",
     "unzip": "^0.1.11",
