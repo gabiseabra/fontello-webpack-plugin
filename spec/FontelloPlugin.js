@@ -1,6 +1,7 @@
 const should = require("should")
 const webpack = require("webpack")
 const MemoryFs = require("memory-fs")
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FontelloPlugin = require("../src")
 const config = require("./config.json")
 
@@ -21,10 +22,11 @@ const webpackConfig = {
 }
 
 describe("FontelloPlugin", () => {
-	let fs, plugin, stats
+	let fs, plugin, htmlWebpackPlugin, stats
 
 	before(() => {
 		fs = new MemoryFs()
+		htmlWebpackPlugin = new HtmlWebpackPlugin({})
 		plugin = new FontelloPlugin({
 			config,
 			session,
@@ -35,7 +37,7 @@ describe("FontelloPlugin", () => {
 			}
 		})
 		const compiler = webpack(Object.assign({}, webpackConfig, {
-			plugins: [ plugin ]
+			plugins: [ htmlWebpackPlugin, plugin ]
 		}))
 		compiler.outputFileSystem = fs
 		return new Promise((resolve, reject) => {
@@ -53,8 +55,8 @@ describe("FontelloPlugin", () => {
 	})
 
 	it("adds a chunk to compilation", () => {
-		stats.compilation.namedChunks
-		.should.have.key(plugin.options.name)
+		Object.keys(stats.compilation.namedChunks)
+		.should.containEql(plugin.options.name)
 	})
 
 	it("emits selected font files", () => {
