@@ -48,7 +48,7 @@ class FontelloPlugin {
 					}
 				})
 				.then(() => cb())
-			compilation.plugin("html-webpack-plugin-before-html-generation", (data, cb) => {
+			compilation.hooks.htmlWebpackPluginBeforeHtmlProcessing.tapAsync('FontellowWebpackPlugin', (data, cb) => {
 				console.log(getPublicPath(compilation))
 				data.assets.css.push(getPublicPath(compilation) + cssFile)
 				cb(null, data)
